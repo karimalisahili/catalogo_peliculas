@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "128413073265",
+    "project_id": "catalogo-peliculas-ac618",
+    "storage_bucket": "catalogo-peliculas-ac618.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128413073265:android:dcc9042413f941614e00d0",
+        "android_client_info": {
+          "package_name": "com.example.catalogo_peliculas"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD55Me6k_6IoKrVXLIV1B0PSd89NZ54I50"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
