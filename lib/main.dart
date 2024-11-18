@@ -1,11 +1,79 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+
 import 'firebase_options.dart';
 import 'app_state.dart';
 import 'splash_screen.dart';
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'home_page.dart';
+
+final _router = GoRouter(
+  initialLocation: '/', // Comienza con la ruta raíz
+  routes: [
+    GoRoute(
+      path: '/',
+      builder: (context, state) => SplashScreenWrapper(),
+      routes: [
+        GoRoute(
+          path: 'sign-in',
+          builder: (context, state) {
+            return SignInScreen(
+              providers: [
+                EmailAuthProvider(),
+              ],
+              actions: [
+                ForgotPasswordAction((context, email) {
+                  final uri = Uri(
+                    path: '/sign-in/forgot-password',
+                    queryParameters: {'email': email},
+                  );
+                  context.push(uri.toString());
+                }),
+                AuthStateChangeAction<SignedIn>((context, state) {
+                  context.pushReplacement('/home');
+                }),
+              ],
+            );
+          },
+          routes: [
+            GoRoute(
+              path: 'forgot-password',
+              builder: (context, state) {
+                final arguments = state.uri.queryParameters;
+                return ForgotPasswordScreen(
+                  email: arguments['email'],
+                  headerMaxExtent: 200,
+                );
+              },
+            ),
+          ],
+        ),
+      ],
+    ),
+    GoRoute(
+      path: '/home',
+      builder: (context, state) => const HomePage(),
+      routes: [
+        GoRoute(
+          path: 'profile',
+          builder: (context, state) {
+            return ProfileScreen(
+              providers: const [],
+              actions: [
+                SignedOutAction((context) {
+                  context.pushReplacement('/sign-in');
+                }),
+              ],
+            );
+          },
+        ),
+      ],
+    ),
+  ],
+);
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,20 +85,26 @@ void main() async {
       providers: [
         ChangeNotifierProvider(create: (_) => ApplicationState()),
       ],
-      child: App(),
+      child: const App(),
     ),
   );
 }
 
 class App extends StatelessWidget {
+  const App({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.red,
+        textTheme: GoogleFonts.robotoTextTheme(
+          Theme.of(context).textTheme,
+        ),
+        useMaterial3: true,
       ),
-      home: SplashScreenWrapper(),
+      routerConfig: _router,
     );
   }
 }
@@ -49,24 +123,8 @@ class _SplashScreenWrapperState extends State<SplashScreenWrapper> {
 
   _navigateToSignIn() async {
     await Future.delayed(
-        Duration(seconds: 3), () {}); // Simula una carga de 3 segundos
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-          builder: (context) => SignInScreen(
-                providers: [
-                  EmailAuthProvider(),
-                ],
-                actions: [
-                  AuthStateChangeAction<SignedIn>((context, state) {
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomePage()),
-                    );
-                  }),
-                ],
-              )),
-    );
+        const Duration(seconds: 3)); // Simula carga de 3 segundos
+    context.go('/sign-in'); // Usa `go` para navegar al Sign In Screen
   }
 
   @override
@@ -74,5 +132,3 @@ class _SplashScreenWrapperState extends State<SplashScreenWrapper> {
     return SplashScreen();
   }
 }
-
-

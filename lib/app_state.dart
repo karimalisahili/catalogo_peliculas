@@ -1,5 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart'
-    hide EmailAuthProvider, PhoneAuthProvider;
+import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider, PhoneAuthProvider;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,10 @@ class ApplicationState extends ChangeNotifier {
   }
 
   bool _loggedIn = false;
+  User? _user;
+
   bool get loggedIn => _loggedIn;
+  User? get user => _user;
 
   Future<void> init() async {
     await Firebase.initializeApp(
@@ -25,8 +27,10 @@ class ApplicationState extends ChangeNotifier {
     FirebaseAuth.instance.userChanges().listen((user) {
       if (user != null) {
         _loggedIn = true;
+        _user = user;
       } else {
         _loggedIn = false;
+        _user = null;
       }
       notifyListeners();
     });

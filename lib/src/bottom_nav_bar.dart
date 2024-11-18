@@ -1,4 +1,8 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
+import 'package:firebase_ui_auth/firebase_ui_auth.dart';
+import 'package:go_router/go_router.dart';
 
 class BottomNavBar extends StatefulWidget {
   final int selectedIndex;
@@ -16,21 +20,28 @@ class _BottomNavBarState extends State<BottomNavBar> {
     return BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
+          icon: Icon(Icons.settings),
+          label: 'Configuración',
+        ),
+        BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          label: 'Home',
+          label: 'Inicio',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.search),
-          label: 'Search',
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          label: 'Profile',
+          icon: Icon(Icons.add),
+          label: 'Agregar Película',
         ),
       ],
       currentIndex: widget.selectedIndex,
-      selectedItemColor: Colors.amber[800],
-      onTap: widget.onItemTapped,
+      selectedItemColor: Colors.red[800],
+      onTap: (index) {
+        if (index == 0) {
+          // Navegar a la pantalla de perfil de Firebase
+          context.push('/home/profile');
+        } else {
+          widget.onItemTapped(index);
+        }
+      },
     );
   }
 }
