@@ -1,14 +1,13 @@
-import 'dart:math';
-
+// Lleva a cabo la creación de la barra de navegación inferior de la aplicación
 import 'package:flutter/material.dart';
-import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:go_router/go_router.dart';
 
 class BottomNavBar extends StatefulWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;
 
-  const BottomNavBar({super.key, required this.selectedIndex, required this.onItemTapped});
+  const BottomNavBar(
+      {super.key, required this.selectedIndex, required this.onItemTapped});
 
   @override
   _BottomNavBarState createState() => _BottomNavBarState();
@@ -21,15 +20,15 @@ class _BottomNavBarState extends State<BottomNavBar> {
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.settings),
-          label: 'Configuración',
+          label: 'Configuration',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.home),
-          label: 'Inicio',
+          label: 'Home',
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.add),
-          label: 'Agregar Película',
+          label: 'Add Movie',
         ),
       ],
       currentIndex: widget.selectedIndex,
@@ -44,11 +43,9 @@ class _BottomNavBarState extends State<BottomNavBar> {
         } else if (index == 2) {
           // Navegar a la pantalla de agregar película
           context.push('/home/agregar-pelicula');
-        }
-        else {
+        } else {
           widget.onItemTapped(index);
         }
-      
       },
     );
   }

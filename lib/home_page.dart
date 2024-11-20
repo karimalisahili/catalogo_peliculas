@@ -1,10 +1,9 @@
+//Pantalla donde se visualiza el catalogo de peliculas, ver el detalle o eliminar la pelicula.
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'app_state.dart';
 import 'src/bottom_nav_bar.dart'; // Importa el nuevo archivo
 import 'movie_details_screen.dart'; // Importa la pantalla de detalles de la película
 
@@ -28,16 +27,16 @@ class _HomePageState extends State<HomePage> {
     final confirmation = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Eliminar Película'),
-        content: const Text('¿Estás seguro de que deseas eliminar esta película?'),
+        title: const Text('Delete Movie'),
+        content: const Text('Are you sure you want to delete this movie?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: const Text('Cancelar'),
+            child: const Text('Cancel'),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: const Text('Eliminar'),
+            child: const Text('Delete'),
           ),
         ],
       ),
@@ -56,7 +55,7 @@ class _HomePageState extends State<HomePage> {
       onWillPop: () async => false, // Deshabilita el botón de retroceso
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Catálogo de Películas'),
+          title: const Text('Movie Catalog'),
           automaticallyImplyLeading: false, // Elimina el botón de retroceso
         ),
         body: StreamBuilder<QuerySnapshot>(
@@ -89,7 +88,7 @@ class _HomePageState extends State<HomePage> {
                     children: [
                       ElevatedButton(
                         onPressed: () => _deleteMovie(movie.id),
-                        child: const Text('Eliminar'),
+                        child: const Text('Delete'),
                       ),
                       const SizedBox(width: 8),
                       ElevatedButton(
@@ -101,7 +100,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           );
                         },
-                        child: const Text('Ver Detalles'),
+                        child: const Text('Details'),
                       ),
                     ],
                   ),

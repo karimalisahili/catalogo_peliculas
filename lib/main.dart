@@ -1,3 +1,7 @@
+//En esta pagina se encuentra el codigo principal de la aplicacion, 
+//en el cual se importan las librerias necesarias para el funcionamiento de la aplicacion, 
+//se inicializa la aplicacion y se crea la clase principal de la aplicacion.
+//ademas se encuentra la funcionalidad del manejo de rutas de la aplicacion.
 import 'package:catalogo_peliculas/add_movie_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -85,8 +89,10 @@ final _router = GoRouter(
             );
           },
         ),
-        GoRoute(path: 'agregar-pelicula',
-        builder: (context, state) => AddMovieScreen(),)
+        GoRoute(
+          path: 'agregar-pelicula',
+          builder: (context, state) => AddMovieScreen(),
+        )
       ],
     ),
   ],

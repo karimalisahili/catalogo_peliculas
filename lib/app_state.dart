@@ -1,3 +1,5 @@
+//Esta pagina se encarga de manejar el estado de la aplicacion, 
+//ademas de inicializar la aplicacion y configurar la autenticacion de Firebase.
 import 'package:firebase_auth/firebase_auth.dart' hide EmailAuthProvider, PhoneAuthProvider;
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';

@@ -1,3 +1,4 @@
+//Pagina que permite insertar una pelicula en la base de datos.
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -54,7 +55,7 @@ class _AddMovieScreenState extends State<AddMovieScreen> {
         // Mostrar SnackBar
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Película agregada con éxito'),
+            content: Text('Movie added successfully'),
             duration: Duration(seconds: 2),
           ),
         );
@@ -79,7 +80,7 @@ class _AddMovieScreenState extends State<AddMovieScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Agregar Película'),
+        title: const Text('Add Movie'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -100,31 +101,31 @@ class _AddMovieScreenState extends State<AddMovieScreen> {
               const SizedBox(height: 16),
               TextFormField(
                 controller: _titleController,
-                decoration: const InputDecoration(labelText: 'Título'),
+                decoration: const InputDecoration(labelText: 'Title'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor ingrese un título';
+                    return 'Please enter a title';
                   }
                   return null;
                 },
               ),
               TextFormField(
                 controller: _genreController,
-                decoration: const InputDecoration(labelText: 'Género'),
+                decoration: const InputDecoration(labelText: 'Genre'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor ingrese un género';
+                    return 'Please enter a genre';
                   }
                   return null;
                 },
               ),
               TextFormField(
                 controller: _yearController,
-                decoration: const InputDecoration(labelText: 'Año'),
+                decoration: const InputDecoration(labelText: 'Year'),
                 keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor ingrese un año';
+                    return 'Please enter a year';
                   }
                   return null;
                 },
@@ -134,18 +135,18 @@ class _AddMovieScreenState extends State<AddMovieScreen> {
                 decoration: const InputDecoration(labelText: 'Director'),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor ingrese un director';
+                    return 'Please enter a director';
                   }
                   return null;
                 },
               ),
               TextFormField(
                 controller: _synopsisController,
-                decoration: const InputDecoration(labelText: 'Sinopsis'),
+                decoration: const InputDecoration(labelText: 'Synopsis'),
                 maxLines: 3,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor ingrese una sinopsis';
+                    return 'Please enter a synopsis';
                   }
                   return null;
                 },
@@ -153,7 +154,7 @@ class _AddMovieScreenState extends State<AddMovieScreen> {
               const SizedBox(height: 16),
               ElevatedButton(
                 onPressed: _submitForm,
-                child: const Text('Agregar Película'),
+                child: const Text('Add Movie'),
               ),
             ],
           ),

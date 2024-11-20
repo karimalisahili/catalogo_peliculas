@@ -16,7 +16,7 @@ class SplashScreen extends StatelessWidget {
           children: [
             // Agrega el texto "Bienvenid@"
             const Text(
-              'Bienvenid@',
+              'Welcome',
               style: TextStyle(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
