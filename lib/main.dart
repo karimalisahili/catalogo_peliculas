@@ -113,7 +113,7 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp.router(
-      title: 'Flutter Demo',
+      title: 'Movie Catalog',
       theme: ThemeData(
         primarySwatch: Colors.red,
         textTheme: GoogleFonts.robotoTextTheme(
