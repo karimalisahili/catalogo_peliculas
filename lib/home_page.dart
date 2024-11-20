@@ -89,93 +89,130 @@ class _HomePageState extends State<HomePage> {
       onWillPop: () async => false, // Disable back button
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Movie Catalog'),
+          title: const Text(
+            'Movie Catalog',
+            style: TextStyle(
+                color: Colors.deepPurple,
+                fontSize: 32,
+                fontWeight: FontWeight.bold),
+          ),
           automaticallyImplyLeading: false, // Elimina el botón de retroceso
         ),
-        body: StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance
-              .collection('movies')
-              .where('userId',
-                  isEqualTo: user?.uid) // Filtra por el ID del usuario actual
-              .snapshots(),
-          builder: (context, snapshot) {
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
+        body: Column(
+          children: [
+            const Divider(color: Colors.deepPurple, thickness: 2),
+            Expanded(
+              child: StreamBuilder<QuerySnapshot>(
+                stream: FirebaseFirestore.instance
+                    .collection('movies')
+                    .where('userId',
+                        isEqualTo:
+                            user?.uid) // Filtra por el ID del usuario actual
+                    .snapshots(),
+                builder: (context, snapshot) {
+                  if (!snapshot.hasData) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
 
-            final movies = snapshot.data!.docs;
-            if (movies.isEmpty) {
-              return const Center(child: Text('No movies have been added yet'));
-            }
+                  final movies = snapshot.data!.docs;
+                  if (movies.isEmpty) {
+                    return const Center(
+                        child: Text('No movies have been added yet'));
+                  }
 
-            return ListView.builder(
-              itemCount: movies.length,
-              itemBuilder: (context, index) {
-                final movie = movies[index];
-                return Container(
-                  margin: const EdgeInsets.all(8.0),
-                  decoration: BoxDecoration(
-                    border: Border.all(color: Colors.grey),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  child: ListTile(
-                    contentPadding: const EdgeInsets.all(8.0),
-                    leading: movie['image'] != null && movie['image'].isNotEmpty
-                        ? SizedBox(
-                            width: 150,
-                            height: 700,
-                            child: Image.file(
-                              File(movie['image']),
-                              fit: BoxFit.cover,
-                            ),
-                          )
-                        : Container(
-                            width: 200,
-                            height: 900,
-                            color: Colors.grey,
-                            child: const Icon(Icons.movie, size: 50),
-                          ),
-                    title: Padding(
-                      padding: const EdgeInsets.only(bottom: 8.0),
-                      child: Text(
-                        movie['title'],
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    subtitle: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
+                  return ListView.builder(
+                    itemCount: movies.length,
+                    itemBuilder: (context, index) {
+                      final movie = movies[index];
+                      return Container(
+                        margin: const EdgeInsets.all(8.0),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            ElevatedButton(
-                              onPressed: () => _deleteMovie(movie.id),
-                              child: const Text('Delete'),
-                            ),
-                            const SizedBox(width: 8),
-                            ElevatedButton(
-                              onPressed: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) =>
-                                        MovieDetailsScreen(movie: movie),
+                            Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                movie['image'] != null &&
+                                        movie['image'].isNotEmpty
+                                    ? Container(
+                                        constraints: BoxConstraints(
+                                          maxHeight:
+                                              150, // Altura máxima de 150 píxeles
+                                        ),
+                                        child: AspectRatio(
+                                          aspectRatio: 1 /
+                                              1, // Ajusta la proporción según sea necesario
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(8.0),
+                                            child: Image.file(
+                                              File(movie['image']),
+                                              fit: BoxFit
+                                                  .cover, // Mantiene la proporción sin hacer zoom in
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : Container(
+                                        width: 100,
+                                        height: 100,
+                                        color: Colors.grey,
+                                        child:
+                                            const Icon(Icons.movie, size: 50),
+                                      ),
+                                const SizedBox(width: 20),
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        movie['title'],
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 80),
+                                      Row(
+                                        children: [
+                                          ElevatedButton(
+                                            onPressed: () =>
+                                                _deleteMovie(movie.id),
+                                            child: const Text('Delete'),
+                                          ),
+                                          const SizedBox(width: 8),
+                                          ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      MovieDetailsScreen(
+                                                          movie: movie),
+                                                ),
+                                              );
+                                            },
+                                            child: const Text('Details'),
+                                          ),
+                                        ],
+                                      ),
+                                    ],
                                   ),
-                                );
-                              },
-                              child: const Text('Details'),
+                                ),
+                              ],
                             ),
+                            const Divider(
+                                color: Colors.deepPurple, thickness: 2),
                           ],
                         ),
-                      ],
-                    ),
-                  ),
-                );
-              },
-            );
-          },
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
         ),
         bottomNavigationBar: BottomNavBar(
           selectedIndex: _selectedIndex,

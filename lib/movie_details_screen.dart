@@ -1,3 +1,4 @@
+//detalles de la pelicula
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -19,14 +20,13 @@ class MovieDetailsScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             movie['image'] != null && movie['image'].isNotEmpty
-                ? Container(
-                    width: double.infinity,
-                    height: 500,
+                ? AspectRatio(
+                    aspectRatio: 1 / 1, // Ajusta la proporción según sea necesario
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: Image.file(
                         File(movie['image']),
-                        fit: BoxFit.cover,
+                        fit: BoxFit.contain, // Mantiene la proporción sin hacer zoom in
                       ),
                     ),
                   )
@@ -145,6 +145,7 @@ class MovieDetailsScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
+            const Divider(color: Colors.deepPurple, thickness: 2),
           ],
         ),
       ),
