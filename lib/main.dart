@@ -1,5 +1,5 @@
-//En esta pagina se encuentra el codigo principal de la aplicacion, 
-//en el cual se importan las librerias necesarias para el funcionamiento de la aplicacion, 
+//En esta pagina se encuentra el codigo principal de la aplicacion,
+//en el cual se importan las librerias necesarias para el funcionamiento de la aplicacion,
 //se inicializa la aplicacion y se crea la clase principal de la aplicacion.
 //ademas se encuentra la funcionalidad del manejo de rutas de la aplicacion.
 import 'package:catalogo_peliculas/add_movie_screen.dart';
@@ -79,13 +79,24 @@ final _router = GoRouter(
         GoRoute(
           path: 'profile',
           builder: (context, state) {
-            return ProfileScreen(
-              providers: const [],
-              actions: [
-                SignedOutAction((context) {
-                  context.pushReplacement('/sign-in');
-                }),
-              ],
+            return Scaffold(
+              appBar: AppBar(
+                title: const Text('Perfil'),
+                leading: IconButton(
+                  icon: const Icon(Icons.arrow_back),
+                  onPressed: () {
+                    context.pop();
+                  },
+                ),
+              ),
+              body: ProfileScreen(
+                providers: const [],
+                actions: [
+                  SignedOutAction((context) {
+                    context.pushReplacement('/sign-in');
+                  }),
+                ],
+              ),
             );
           },
         ),

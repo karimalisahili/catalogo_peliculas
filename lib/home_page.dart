@@ -15,7 +15,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  int _selectedIndex = 1; // Inicio en el índice 1 para que "Inicio" sea el predeterminado
+  int _selectedIndex =
+      1; // Inicio en el índice 1 para que "Inicio" sea el predeterminado
 
   void _onItemTapped(int index) {
     setState(() {
@@ -23,7 +24,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _deleteMovie(String movieId) async {
+  Future<void> _deleteMovie(String movieId) async {
     final confirmation = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -43,7 +44,40 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (confirmation == true) {
-      await FirebaseFirestore.instance.collection('movies').doc(movieId).delete();
+      // Obtener la referencia del documento
+      final docRef =
+          FirebaseFirestore.instance.collection('movies').doc(movieId);
+
+      // Obtener los datos del documento
+      final docSnapshot = await docRef.get();
+      if (docSnapshot.exists) {
+        final data = docSnapshot.data();
+        final imagePath = data?['image'];
+
+        // Eliminar el documento de Firebase
+        await docRef.delete();
+
+        // Verificar si la imagen es referenciada por otras películas
+        if (imagePath != null) {
+          final querySnapshot = await FirebaseFirestore.instance
+              .collection('movies')
+              .where('image', isEqualTo: imagePath)
+              .get();
+
+          // Si no hay otras referencias a la imagen, eliminarla de la memoria del teléfono
+          if (querySnapshot.docs.isEmpty) {
+            final file = File(imagePath);
+            if (await file.exists()) {
+              await file.delete();
+            }
+          }
+        }
+
+        // Mostrar un mensaje de confirmación
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Movie deleted successfully')),
+        );
+      }
     }
   }
 
@@ -52,7 +86,7 @@ class _HomePageState extends State<HomePage> {
     final user = FirebaseAuth.instance.currentUser;
 
     return WillPopScope(
-      onWillPop: () async => false, // Deshabilita el botón de retroceso
+      onWillPop: () async => false, // Disable back button
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Movie Catalog'),
@@ -61,7 +95,8 @@ class _HomePageState extends State<HomePage> {
         body: StreamBuilder<QuerySnapshot>(
           stream: FirebaseFirestore.instance
               .collection('movies')
-              .where('userId', isEqualTo: user?.uid) // Filtra por el ID del usuario actual
+              .where('userId',
+                  isEqualTo: user?.uid) // Filtra por el ID del usuario actual
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
@@ -69,40 +104,73 @@ class _HomePageState extends State<HomePage> {
             }
 
             final movies = snapshot.data!.docs;
+            if (movies.isEmpty) {
+              return const Center(child: Text('No movies have been added yet'));
+            }
 
             return ListView.builder(
               itemCount: movies.length,
               itemBuilder: (context, index) {
                 final movie = movies[index];
-                return ListTile(
-                  leading: movie['image'] != null && movie['image'].isNotEmpty
-                      ? Image.file(File(movie['image']))
-                      : Container(
-                          width: 50,
-                          height: 50,
-                          color: Colors.grey,
-                          child: const Icon(Icons.movie),
-                        ),
-                  title: Text(movie['title']),
-                  subtitle: Row(
-                    children: [
-                      ElevatedButton(
-                        onPressed: () => _deleteMovie(movie.id),
-                        child: const Text('Delete'),
-                      ),
-                      const SizedBox(width: 8),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MovieDetailsScreen(movie: movie),
+                return Container(
+                  margin: const EdgeInsets.all(8.0),
+                  decoration: BoxDecoration(
+                    border: Border.all(color: Colors.grey),
+                    borderRadius: BorderRadius.circular(8.0),
+                  ),
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.all(8.0),
+                    leading: movie['image'] != null && movie['image'].isNotEmpty
+                        ? SizedBox(
+                            width: 150,
+                            height: 700,
+                            child: Image.file(
+                              File(movie['image']),
+                              fit: BoxFit.cover,
                             ),
-                          );
-                        },
-                        child: const Text('Details'),
+                          )
+                        : Container(
+                            width: 200,
+                            height: 900,
+                            color: Colors.grey,
+                            child: const Icon(Icons.movie, size: 50),
+                          ),
+                    title: Padding(
+                      padding: const EdgeInsets.only(bottom: 8.0),
+                      child: Text(
+                        movie['title'],
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
-                    ],
+                    ),
+                    subtitle: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            ElevatedButton(
+                              onPressed: () => _deleteMovie(movie.id),
+                              child: const Text('Delete'),
+                            ),
+                            const SizedBox(width: 8),
+                            ElevatedButton(
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        MovieDetailsScreen(movie: movie),
+                                  ),
+                                );
+                              },
+                              child: const Text('Details'),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
                 );
               },

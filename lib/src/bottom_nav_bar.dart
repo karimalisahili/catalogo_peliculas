@@ -32,7 +32,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         ),
       ],
       currentIndex: widget.selectedIndex,
-      selectedItemColor: Colors.red[800],
+      selectedItemColor: Colors.deepPurple,
       onTap: (index) {
         if (index == 0) {
           // Navegar a la pantalla de perfil de Firebase
