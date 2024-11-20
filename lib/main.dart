@@ -1,3 +1,4 @@
+import 'package:catalogo_peliculas/add_movie_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -35,6 +36,20 @@ final _router = GoRouter(
                 AuthStateChangeAction<SignedIn>((context, state) {
                   context.pushReplacement('/home');
                 }),
+                AuthStateChangeAction<UserCreated>((context, state) {
+                  final user = state.credential.user;
+                  if (user != null) {
+                    user.updateDisplayName(user.email!.split('@')[0]);
+                    if (!user.emailVerified) {
+                      user.sendEmailVerification();
+                      const snackBar = SnackBar(
+                          content: Text(
+                              'Please check your email to verify your email address'));
+                      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    }
+                    context.pushReplacement('/home');
+                  }
+                }),
               ],
             );
           },
@@ -70,6 +85,8 @@ final _router = GoRouter(
             );
           },
         ),
+        GoRoute(path: 'agregar-pelicula',
+        builder: (context, state) => AddMovieScreen(),)
       ],
     ),
   ],

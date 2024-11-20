@@ -1,9 +1,7 @@
 name: catalogo_peliculas
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
-
-
 
 environment:
   sdk: ^3.5.3
@@ -11,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  
+
   cupertino_icons: ^1.0.8
   google_fonts: ^6.2.1
   go_router: ^14.2.7
@@ -20,6 +18,9 @@ dependencies:
   cloud_firestore: ^5.4.5
   provider: ^6.1.2
   firebase_ui_auth: ^1.16.0
+  image_picker: ^0.8.7+3
+  firebase_storage: ^12.3.6
+  path_provider: ^2.1.5
 
 dev_dependencies:
   flutter_test:

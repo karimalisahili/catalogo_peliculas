@@ -38,9 +38,17 @@ class _BottomNavBarState extends State<BottomNavBar> {
         if (index == 0) {
           // Navegar a la pantalla de perfil de Firebase
           context.push('/home/profile');
-        } else {
+        } else if (index == 1) {
+          // Navegar a la pantalla de home de Firebase
+          context.push('/');
+        } else if (index == 2) {
+          // Navegar a la pantalla de agregar película
+          context.push('/home/agregar-pelicula');
+        }
+        else {
           widget.onItemTapped(index);
         }
+      
       },
     );
   }
