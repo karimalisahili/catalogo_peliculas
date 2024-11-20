@@ -137,11 +137,11 @@ class _HomePageState extends State<HomePage> {
                                     ? Container(
                                         constraints: BoxConstraints(
                                           maxHeight:
-                                              150, // Altura máxima de 150 píxeles
+                                              170, // Altura máxima de 150 píxeles
                                         ),
                                         child: AspectRatio(
-                                          aspectRatio: 1 /
-                                              1, // Ajusta la proporción según sea necesario
+                                          aspectRatio: 3 /
+                                            4, // Ajusta la proporción según sea necesario
                                           child: ClipRRect(
                                             borderRadius:
                                                 BorderRadius.circular(8.0),
