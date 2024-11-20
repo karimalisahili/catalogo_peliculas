@@ -127,6 +127,8 @@ class App extends StatelessWidget {
 }
 
 class SplashScreenWrapper extends StatefulWidget {
+  const SplashScreenWrapper({super.key});
+
   @override
   _SplashScreenWrapperState createState() => _SplashScreenWrapperState();
 }

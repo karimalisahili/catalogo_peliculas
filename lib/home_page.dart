@@ -28,16 +28,16 @@ class _HomePageState extends State<HomePage> {
     final confirmation = await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Eliminar Película'),
-        content: Text('¿Estás seguro de que deseas eliminar esta película?'),
+        title: const Text('Eliminar Película'),
+        content: const Text('¿Estás seguro de que deseas eliminar esta película?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: Text('Cancelar'),
+            child: const Text('Cancelar'),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: Text('Eliminar'),
+            child: const Text('Eliminar'),
           ),
         ],
       ),
@@ -56,7 +56,7 @@ class _HomePageState extends State<HomePage> {
       onWillPop: () async => false, // Deshabilita el botón de retroceso
       child: Scaffold(
         appBar: AppBar(
-          title: Text('Catálogo de Películas'),
+          title: const Text('Catálogo de Películas'),
           automaticallyImplyLeading: false, // Elimina el botón de retroceso
         ),
         body: StreamBuilder<QuerySnapshot>(
@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage> {
               .snapshots(),
           builder: (context, snapshot) {
             if (!snapshot.hasData) {
-              return Center(child: CircularProgressIndicator());
+              return const Center(child: CircularProgressIndicator());
             }
 
             final movies = snapshot.data!.docs;
@@ -82,16 +82,16 @@ class _HomePageState extends State<HomePage> {
                           width: 50,
                           height: 50,
                           color: Colors.grey,
-                          child: Icon(Icons.movie),
+                          child: const Icon(Icons.movie),
                         ),
                   title: Text(movie['title']),
                   subtitle: Row(
                     children: [
                       ElevatedButton(
                         onPressed: () => _deleteMovie(movie.id),
-                        child: Text('Eliminar'),
+                        child: const Text('Eliminar'),
                       ),
-                      SizedBox(width: 8),
+                      const SizedBox(width: 8),
                       ElevatedButton(
                         onPressed: () {
                           Navigator.push(
@@ -101,7 +101,7 @@ class _HomePageState extends State<HomePage> {
                             ),
                           );
                         },
-                        child: Text('Ver Detalles'),
+                        child: const Text('Ver Detalles'),
                       ),
                     ],
                   ),
